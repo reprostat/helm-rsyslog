@@ -20,6 +20,7 @@ echo "Building Helm chart..."
 helm package --destination ../ .
 echo "Cleanup..."
 rm Chart.lock
+mv charts tmp_charts
 
 git config user.name "$GITHUB_ACTOR"
 git config user.email "${GITHUB_ACTOR}@bots.github.com"
@@ -28,6 +29,15 @@ git checkout "$target_branch"
 #git rebase "${remote_name}/${main_branch}"
 
 mv ../*.tgz .
+echo "Updating dependencies..."
+for file in $(find tmp_charts -name "*.tgz"); do
+    if [[ ! -e charts/$(basename $file) ]]; then 
+        echo "  $(basename $file)"
+        mv "$file" charts/ 
+    fi
+done
+rm -rf tmp_charts
+
 helm repo index .
 
 git add -A
