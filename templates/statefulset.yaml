@@ -1,7 +1,7 @@
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
-  name: {{ include "rsyslog.fullname" . }}
+  name: {{ template "rsyslog.fullname" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: {{ template "rsyslog.fullname" . }}
     release: {{ .Release.Name }}
@@ -11,7 +11,7 @@ spec:
   {{- end }}  
   selector:
     matchLabels: {{ include "common.labels.matchLabels" . | nindent 6 }}
-      app.kubernetes.io/component: {{ include "rsyslog.fullname" . }}
+      app.kubernetes.io/component: {{ template "rsyslog.fullname" . }}
   {{- if .Values.updateStrategy }}      
   updateStrategy:
   {{ toYaml .Values.updateStrategy | nindent 4 }}
@@ -19,10 +19,10 @@ spec:
   template:
     metadata:
       labels:
-        app.kubernetes.io/component: {{ include "rsyslog.fullname" . }}
+        app.kubernetes.io/component: {{ template "rsyslog.fullname" . }}
         release: {{ .Release.Name }}
     spec:
-      serviceAccountName: {{ include "rsyslog.fullname" . }}
+      serviceAccountName: {{ template "rsyslog.fullname" . }}
       nodeSelector:
         {{- toYaml .Values.nodeSelector | nindent 8 }}
       tolerations:
