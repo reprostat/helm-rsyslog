@@ -1,0 +1,48 @@
+apiVersion: v1
+entries:
+  common:
+  - annotations:
+      category: Infrastructure
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 2.31.3
+    created: "2025-07-30T09:28:55.954907763Z"
+    description: A Library Helm Chart for grouping common logic between bitnami charts.
+      This chart is not deployable by itself.
+    digest: 7860e7fb0a543d28d2098bc1115a4bcda1dcd833e32e09712fde6c1c8e7ef4b7
+    home: https://bitnami.com
+    icon: https://dyltqmyl993wv.cloudfront.net/downloads/logos/bitnami-mark.png
+    keywords:
+    - common
+    - helper
+    - template
+    - function
+    - bitnami
+    maintainers:
+    - name: Broadcom, Inc. All Rights Reserved.
+      url: https://github.com/bitnami/charts
+    name: common
+    sources:
+    - https://github.com/bitnami/charts/tree/main/bitnami/common
+    type: library
+    urls:
+    - charts/common-2.31.3.tgz
+    version: 2.31.3
+  rsyslog:
+  - apiVersion: v2
+    appVersion: 2025-04
+    created: "2025-07-30T09:28:55.954237082Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: ~2
+    description: Helm chart for rsyslog
+    digest: 0039cd10cce9eecba673e19cd2d0175e5fcd875b42747df159a369f1dc22d25e
+    name: rsyslog
+    type: application
+    urls:
+    - rsyslog-0.0.1.tgz
+    version: 0.0.1
+generated: "2025-07-30T09:28:55.952501474Z"
