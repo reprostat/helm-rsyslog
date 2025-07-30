@@ -1,5 +1,5 @@
 {{- define "rsyslog.fullname" -}}
-{{- $name := .Release.Name .Values.nameOverride -}}
+{{- $name := default .Release.Name .Values.nameOverride -}}
 {{- if contains $name .Release.Name -}}
 {{- .Release.Name | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
