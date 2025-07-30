@@ -1,0 +1,14 @@
+apiVersion: v2
+name: rsyslog
+description: Helm chart for rsyslog
+version: 0.0.1
+type: application
+
+appVersion: 2025-04
+
+dependencies:
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: ~2
