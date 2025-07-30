@@ -12,6 +12,7 @@ spec:
   selector:
     matchLabels: {{ include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: {{ include "rsyslog.fullname" . }}
+  {{- if .Values.updateStrategy }}      
   updateStrategy:
   {{ toYaml .Values.updateStrategy | nindent 4 }}
   {{- end }}      
