@@ -6,7 +6,7 @@ entries:
       licenses: Apache-2.0
     apiVersion: v2
     appVersion: 2.31.3
-    created: "2025-07-30T11:27:02.284660624Z"
+    created: "2025-07-30T11:45:03.083581941Z"
     description: A Library Helm Chart for grouping common logic between bitnami charts.
       This chart is not deployable by itself.
     digest: 7860e7fb0a543d28d2098bc1115a4bcda1dcd833e32e09712fde6c1c8e7ef4b7
@@ -31,7 +31,23 @@ entries:
   rsyslog:
   - apiVersion: v2
     appVersion: 2025-04
-    created: "2025-07-30T11:27:02.283974002Z"
+    created: "2025-07-30T11:45:03.082908526Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: ~2
+    description: Helm chart for rsyslog
+    digest: 8d19963bd05d08c0a21449424da37c5d6793d1e4660a6fc9ddcd2f6ab5038632
+    name: rsyslog
+    type: application
+    urls:
+    - rsyslog-0.0.5.tgz
+    version: 0.0.5
+  - apiVersion: v2
+    appVersion: 2025-04
+    created: "2025-07-30T11:45:03.075022813Z"
     dependencies:
     - name: common
       repository: https://charts.bitnami.com/bitnami
@@ -47,7 +63,7 @@ entries:
     version: 0.0.4
   - apiVersion: v2
     appVersion: 2025-04
-    created: "2025-07-30T11:27:02.279252976Z"
+    created: "2025-07-30T11:45:03.069661461Z"
     dependencies:
     - name: common
       repository: https://charts.bitnami.com/bitnami
@@ -63,7 +79,7 @@ entries:
     version: 0.0.3
   - apiVersion: v2
     appVersion: 2025-04
-    created: "2025-07-30T11:27:02.276240771Z"
+    created: "2025-07-30T11:45:03.066657268Z"
     dependencies:
     - name: common
       repository: https://charts.bitnami.com/bitnami
@@ -79,7 +95,7 @@ entries:
     version: 0.0.2
   - apiVersion: v2
     appVersion: 2025-04
-    created: "2025-07-30T11:27:02.273059709Z"
+    created: "2025-07-30T11:45:03.063439767Z"
     dependencies:
     - name: common
       repository: https://charts.bitnami.com/bitnami
@@ -93,4 +109,4 @@ entries:
     urls:
     - rsyslog-0.0.1.tgz
     version: 0.0.1
-generated: "2025-07-30T11:27:02.270881451Z"
+generated: "2025-07-30T11:45:03.061357405Z"
