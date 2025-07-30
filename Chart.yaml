@@ -1,7 +1,7 @@
 apiVersion: v2
 name: rsyslog
 description: Helm chart for rsyslog
-version: 0.0.3
+version: 0.0.4
 type: application
 
 appVersion: 2025-04
