@@ -39,12 +39,12 @@ spec:
       {{- end }}
       terminationGracePeriodSeconds: 30      
       containers:
-        - name: daemon
+        - name: {{ .Chart.Name }}
           image: {{ .Values.image.repository }}:{{ default .Chart.AppVersion .Values.image.tag }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
-          {{- end }}        env:
+          {{- end }}
           
           volumeMounts:
           {{ if .Values.volumeMounts }}
