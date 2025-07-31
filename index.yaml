@@ -6,7 +6,7 @@ entries:
       licenses: Apache-2.0
     apiVersion: v2
     appVersion: 2.31.3
-    created: "2025-07-30T13:02:45.842260123Z"
+    created: "2025-07-31T14:56:29.285528399Z"
     description: A Library Helm Chart for grouping common logic between bitnami charts.
       This chart is not deployable by itself.
     digest: 7860e7fb0a543d28d2098bc1115a4bcda1dcd833e32e09712fde6c1c8e7ef4b7
@@ -31,7 +31,23 @@ entries:
   rsyslog:
   - apiVersion: v2
     appVersion: 2025-04
-    created: "2025-07-30T13:02:45.841615989Z"
+    created: "2025-07-31T14:56:29.284822792Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: ~2
+    description: Helm chart for rsyslog
+    digest: c2482dd13cfc0e19f714332e3d5385405df29ff7fad1f3d50cffe017d58beb01
+    name: rsyslog
+    type: application
+    urls:
+    - rsyslog-0.1.0.tgz
+    version: 0.1.0
+  - apiVersion: v2
+    appVersion: 2025-04
+    created: "2025-07-31T14:56:29.283812088Z"
     dependencies:
     - name: common
       repository: https://charts.bitnami.com/bitnami
@@ -47,7 +63,7 @@ entries:
     version: 0.0.9
   - apiVersion: v2
     appVersion: 2025-04
-    created: "2025-07-30T13:02:45.840579611Z"
+    created: "2025-07-31T14:56:29.282772459Z"
     dependencies:
     - name: common
       repository: https://charts.bitnami.com/bitnami
@@ -63,7 +79,7 @@ entries:
     version: 0.0.8
   - apiVersion: v2
     appVersion: 2025-04
-    created: "2025-07-30T13:02:45.839512547Z"
+    created: "2025-07-31T14:56:29.281615468Z"
     dependencies:
     - name: common
       repository: https://charts.bitnami.com/bitnami
@@ -79,7 +95,7 @@ entries:
     version: 0.0.7
   - apiVersion: v2
     appVersion: 2025-04
-    created: "2025-07-30T13:02:45.823018946Z"
+    created: "2025-07-31T14:56:29.26603188Z"
     dependencies:
     - name: common
       repository: https://charts.bitnami.com/bitnami
@@ -95,7 +111,7 @@ entries:
     version: 0.0.6
   - apiVersion: v2
     appVersion: 2025-04
-    created: "2025-07-30T13:02:45.813117865Z"
+    created: "2025-07-31T14:56:29.255556496Z"
     dependencies:
     - name: common
       repository: https://charts.bitnami.com/bitnami
@@ -111,7 +127,7 @@ entries:
     version: 0.0.5
   - apiVersion: v2
     appVersion: 2025-04
-    created: "2025-07-30T13:02:45.806280404Z"
+    created: "2025-07-31T14:56:29.249257474Z"
     dependencies:
     - name: common
       repository: https://charts.bitnami.com/bitnami
@@ -127,7 +143,7 @@ entries:
     version: 0.0.4
   - apiVersion: v2
     appVersion: 2025-04
-    created: "2025-07-30T13:02:45.801037363Z"
+    created: "2025-07-31T14:56:29.244431176Z"
     dependencies:
     - name: common
       repository: https://charts.bitnami.com/bitnami
@@ -143,7 +159,7 @@ entries:
     version: 0.0.3
   - apiVersion: v2
     appVersion: 2025-04
-    created: "2025-07-30T13:02:45.797892685Z"
+    created: "2025-07-31T14:56:29.241278945Z"
     dependencies:
     - name: common
       repository: https://charts.bitnami.com/bitnami
@@ -159,7 +175,7 @@ entries:
     version: 0.0.2
   - apiVersion: v2
     appVersion: 2025-04
-    created: "2025-07-30T13:02:45.794239092Z"
+    created: "2025-07-31T14:56:29.237771812Z"
     dependencies:
     - name: common
       repository: https://charts.bitnami.com/bitnami
@@ -173,4 +189,4 @@ entries:
     urls:
     - rsyslog-0.0.1.tgz
     version: 0.0.1
-generated: "2025-07-30T13:02:45.792204338Z"
+generated: "2025-07-31T14:56:29.235643891Z"
