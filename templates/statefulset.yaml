@@ -37,7 +37,16 @@ spec:
       {{- if .Values.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
-      terminationGracePeriodSeconds: 30      
+      terminationGracePeriodSeconds: 30   
+      {{- if and .Values.logrotate.enabled .Values.logrotate.config.olddir }}
+      initContainers:
+        - name: init-logrotate-olddir
+          image: busybox
+          command: ["sh", "-c", "mkdir -p /var/log/{{ .Values.logrotate.config.olddir }}"]
+          volumeMounts:
+          - name: logs
+            mountPath: /var/log          
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           image: {{ .Values.image.repository }}:{{ default .Chart.AppVersion .Values.image.tag }}
@@ -46,11 +55,6 @@ spec:
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           
-          volumeMounts:
-          {{ if .Values.volumeMounts }}
-          {{ toYaml .Values.volumeMounts | nindent 8 }}
-          {{ end }}
-            
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
 
@@ -95,8 +99,34 @@ spec:
           {{- if .Values.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
-      {{- if or (and .Values.persistence.enabled .Values.persistence.existingClaim) .Values.extraVolumes }}
+      {{- if .Values.logrotate.enabled }}
+        - name: logrotate
+          image: {{ printf "%s:%s" .Values.logrotate.image.repository .Values.logrotate.image.tag }}
+          imagePullPolicy: {{ .Values.logrotate.image.pullPolicy | quote }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.logrotate.resources | nindent 12 }}
+          volumeMounts:
+            - name: logs
+              mountPath: /var/log
+            - name: logrotate-config
+              mountPath: /etc/logrotate.conf
+              subPath: logrotate.conf
+      {{- end }}
+
+      {{- if .Values.extraSidecars }}
+      {{- include "common.tplvalues.render" ( dict "value" .Values.extraSidecars "context" $) | nindent 8 }}
+      {{- end }}
+
+      {{- if or (and .Values.persistence.enabled .Values.persistence.existingClaim) .Values.extraVolumes .Values.logrotate.enabled }}
       volumes:
+      {{- if .Values.logrotate.enabled }}
+        - name: logrotate-config
+          configMap:
+            name: {{ template "rsyslog.fullname" . }}-logrotate-config
+      {{- end }}
       {{- if and .Values.persistence.enabled .Values.persistence.existingClaim }}
         - name: logs
           persistentVolumeClaim:

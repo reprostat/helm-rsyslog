@@ -1,0 +1,22 @@
+{{- if .Values.logrotate.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "rsyslog.fullname" . }}-logrotate-config
+data:
+  logrotate.conf: |
+{{- range .Values.logrotate.config.logfiles }}
+    /var/log/{{ . }}
+{{- end }}
+    {
+        su root root
+        {{ .Values.logrotate.config.interval }}
+        rotate {{ .Values.logrotate.config.rotate }}
+        {{ if .Values.logrotate.config.missingok }}missingok{{ end }}
+        {{ if .Values.logrotate.config.notifempty }}notifempty{{ end }}
+        {{ if .Values.logrotate.config.compress }}compress{{ end }}
+        {{ if .Values.logrotate.config.delaycompress }}delaycompress{{ end }}
+        {{ if .Values.logrotate.config.copytruncate }}copytruncate{{ end }}
+        {{ if .Values.logrotate.config.olddir }}olddir /var/log/{{ .Values.logrotate.config.olddir }}{{ end }}
+    }
+{{- end }}

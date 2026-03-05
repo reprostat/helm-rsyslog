@@ -42,28 +42,62 @@ persistence:
   # storageClass: ""
   # existingClaim: rsyslog-pvc
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOncePod
   size: 1Gi
+
+## Configure logrotation as a sidecar container
+## @param logrotate Add logrotation as a sidecar container
+logrotate:
+  enabled: false
+  image:
+    repository: skymatic/logrotate
+    tag: latest
+    pullPolicy: IfNotPresent
+  resources: {}
+  config:
+    logfiles:
+      - "*.log"
+    interval: daily
+    rotate: 7
+    missingok: true
+    notifempty: true
+    copytruncate: true
+    olddir: old # Directory to store rotated log files; relative to /var/log
+    compress: true
+    delaycompress: false 
+
+## Configure additional sidecar containers
+## @param extraSidecars Add additional sidecar containers
+## e.g:
+## extraSidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+extraSidecars: []
 
 hostAliases: []
 
 ## Configure Pods Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-## @param podSecurityContext.enabled Enabled OPENLDAP  pods' Security Context
-## @param podSecurityContext.fsGroup Set OPENLDAP  pod's Security Context fsGroup
+## @param podSecurityContext.enabled Enabled rsyslog  pods' Security Context
+## @param podSecurityContext.fsGroup Set rsyslog  pod's Security Context fsGroup
 ##
 podSecurityContext:
-  enabled: true
-  fsGroup: 1001
+  enabled: false
+  fsGroup: 1000
 ## Configure Container Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-## @param containerSecurityContext.enabled Enabled OPENLDAP  containers' Security Context
-## @param containerSecurityContext.runAsUser Set OPENLDAP  containers' Security Context runAsUser
-## @param containerSecurityContext.runAsNonRoot Set OPENLDAP  containers' Security Context runAsNonRoot
+## @param containerSecurityContext.enabled Enabled rsyslog  containers' Security Context
+## @param containerSecurityContext.runAsUser Set rsyslog  containers' Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set rsyslog  containers' Security Context runAsNonRoot
 ##
 containerSecurityContext:
   enabled: false
-  runAsUser: 1001
+  runAsUser: 1000
   runAsNonRoot: true
 
 ## Configure extra options for liveness, readiness, and startup probes
