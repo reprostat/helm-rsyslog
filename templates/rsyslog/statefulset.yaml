@@ -49,7 +49,7 @@ spec:
       {{- end }}
       containers:
         - name: {{ .Chart.Name }}
-          image: {{ .Values.image.repository }}:{{ default .Chart.AppVersion .Values.image.tag }}
+          image: {{ .Values.image.repository }}:{{ ternary "latest" (default .Chart.AppVersion .Values.image.tag) .Values.tls.enabled }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
@@ -58,15 +58,41 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
 
+          {{- if .Values.tls.enabled }}
+          env:
+            - name: ENABLE_UDP
+              value: "off"
+            - name: ENABLE_TCP
+              value: "off"
+            - name: ENABLE_TLS
+              value: "on"
+            - name: TLS_CA_FILE
+              value: "/etc/rsyslog.d/certs/ca.crt"
+            - name: TLS_CERT_FILE
+              value: "/etc/rsyslog.d/certs/tls.crt"
+            - name: TLS_KEY_FILE
+              value: "/etc/rsyslog.d/certs/tls.key"
+            - name: TLS_AUTH_MODE
+              value: "{{ .Values.tls.authMode }}"
+          {{- end }}
+
           ports:
-          - containerPort: {{ .Values.port }}
+          - containerPort: {{ ternary 6514 514 .Values.tls.enabled }}
             name: rsyslog-port
             protocol: TCP
           
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
+            {{- if .Values.tls.enabled }}
+            exec:
+              command:
+                - /bin/bash
+                - -c
+                - "pidof rsyslogd >/dev/null || exit 1"
+            {{- else }}
             tcpSocket:
               port: rsyslog-port
+            {{- end }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
@@ -75,8 +101,16 @@ spec:
           {{- end }}
           {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
+            {{- if .Values.tls.enabled }}
+            exec:
+              command:
+                - /bin/bash
+                - -c
+                - "pidof rsyslogd >/dev/null || exit 1"
+            {{- else }}
             tcpSocket:
               port: rsyslog-port
+            {{- end }}
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
@@ -85,8 +119,16 @@ spec:
           {{- end }}
           {{- if .Values.startupProbe.enabled }}
           startupProbe:
+            {{- if .Values.tls.enabled }}
+            exec:
+              command:
+                - /bin/bash
+                - -c
+                - "pidof rsyslogd >/dev/null || exit 1"
+            {{- else }}
             tcpSocket:
               port: rsyslog-port
+            {{- end }}
             initialDelaySeconds: {{ .Values.startupProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.startupProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds }}
@@ -96,6 +138,11 @@ spec:
           volumeMounts:
             - name: logs
               mountPath: /var/log
+          {{- if .Values.tls.enabled }}
+            - name: tls-certs
+              mountPath: /etc/rsyslog.d/certs
+              readOnly: true
+          {{- end }}
           {{- if .Values.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -120,8 +167,13 @@ spec:
       {{- include "common.tplvalues.render" ( dict "value" .Values.extraSidecars "context" $) | nindent 8 }}
       {{- end }}
 
-      {{- if or (and .Values.persistence.enabled .Values.persistence.existingClaim) .Values.extraVolumes .Values.logrotate.enabled }}
+      {{- if or (and .Values.persistence.enabled .Values.persistence.existingClaim) .Values.tls.enabled  .Values.logrotate.enabled .Values.extraVolumes }}
       volumes:
+      {{- if .Values.tls.enabled }}
+        - name: tls-certs
+          secret:
+            secretName: {{ .Values.tls.secretName }}
+      {{- end }}
       {{- if .Values.logrotate.enabled }}
         - name: logrotate-config
           configMap:

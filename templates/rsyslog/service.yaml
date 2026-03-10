@@ -15,4 +15,4 @@ spec:
   - name: rsyslog-port
     port: {{ .Values.service.port }}
     protocol: TCP
-    targetPort: {{ .Values.port }}
+    targetPort: rsyslog-port

@@ -33,9 +33,21 @@ autoscaling:
     #   - type: Pods
     #     value: 2
     #     periodSeconds: 60
-port: 514
+
 service:
   port: 514
+
+## Configure TLS
+## Note: When TLS is enabled, you need to create a Kubernetes Secret containing the TLS certificates and specify its
+## name in tls.secretName. Also, the "latest" image will be used, which is configured for TLS. Finally, the container
+## port will be switched to 6514, RFC 5425. The service port will remain unchanged, so the Kubernetes Service still
+## exposes the rsyslog deployment on the desired port, as specified in service.port.
+## @param tls.enabled Enable TLS for rsyslog
+## @param tls.secretName Name of the Kubernetes Secret containing TLS certificates
+tls:
+  enabled: false
+  authMode: "x509/certvalid"
+  secretName: rsyslog-tls-secret
 
 persistence:
   enabled: false
