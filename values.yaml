@@ -46,7 +46,7 @@ service:
 ## @param tls.secretName Name of the Kubernetes Secret containing TLS certificates
 tls:
   enabled: false
-  authMode: "x509/certvalid"
+  authMode: "anon"
   secretName: rsyslog-tls-secret
 
 persistence:
