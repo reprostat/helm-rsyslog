@@ -76,6 +76,12 @@ spec:
               value: "{{ .Values.tls.authMode }}"
           {{- end }}
 
+          {{- if .Values.extraEnvVarsSecret }}
+          envFrom:
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsSecret "context" $) }}
+          {{- end }}
+
           ports:
           - containerPort: {{ ternary 6514 514 .Values.tls.enabled }}
             name: rsyslog-port

@@ -34,6 +34,10 @@ autoscaling:
     #     value: 2
     #     periodSeconds: 60
 
+## @param extraEnvVarsSecret Name of Kubernetes Secret containing extra env vars to be added to the rsyslog container.
+##
+extraEnvVarsSecret:
+
 service:
   port: 514
 
